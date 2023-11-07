@@ -1,35 +1,27 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContacts } from '../../redux/selectors';
-import { addContact } from '../../redux/contactsSlice';
 import styles from './ContactForm.module.css';
+import { addContact } from '../../redux/operations';
 
 const ContactForm = () => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
-  const contacts = useSelector(selectContacts);
+
+  const contact = useSelector(selectContacts);
   const dispatch = useDispatch();
 
-  const newContact = (e) => {
-    'name' === e.target.name ? setName(e.target.value) : setNumber(e.target.value);
-  };
 
   const addNewContact = (e) => {
     e.preventDefault();
 
-    const isExist = contacts.find(
-      (elem) => elem.name.toLowerCase() === name.toLowerCase()
-    );
+    const name = e.target.name.value;
+    const phone = e.target.phone.value;
 
-    if (isExist) {
-      alert(`"${name}" is already in contacts!`);
+    if (contact.some(e => e.name === name)) {
+      alert('this contact is already exist, please add a new one');
       return;
     }
 
-    dispatch(addContact({ name, number }));
-
-    setName('');
-    setNumber('');
+    dispatch(addContact({ name, phone }));
+    e.target.reset()
   };
 
   return (
@@ -39,8 +31,6 @@ const ContactForm = () => {
         <input
           type='text'
           name='name'
-          value={name}
-          onChange={newContact}
           required
           className={styles.input}
         />
@@ -49,9 +39,7 @@ const ContactForm = () => {
         Number:
         <input
           type='tel'
-          name='number'
-          value={number}
-          onChange={newContact}
+          name='phone'
           required
           placeholder='000-00-00'
           className={styles.input}

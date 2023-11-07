@@ -1,13 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { addFilter } from '../../redux/filterSlice';
+import { addFilter } from '../../redux/contactsSlice';
 import styles from './Filter.module.css';
 
 const Filter = () => {
   const dispatch = useDispatch();
 
  const addFilterContact = (e) => {
-   dispatch(addFilter(e.target.value))
+   dispatch(addFilter(e.currentTarget.value))
  }
 
   return (
